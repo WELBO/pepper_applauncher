@@ -32,8 +32,11 @@ Example content is:
 ```
 
 The `title` property corresponds to the name of the app on Pepper's tablet.
+
 The `app_logo` is the image that is displayed on the app launcher. You can select any of the images that are currently present in the `html\resources` folder or add your own images there.
+
 The `app_id` property corresponds to the behaviour you want to start
+
 The optional `default` property can be set to `true` on **ONE** app. When it is set the
 applauncher will start this app after a 10 seconds timeout, if no choice has been made
 by the user.
