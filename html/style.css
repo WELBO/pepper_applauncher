@@ -1,0 +1,77 @@
+@font-face {
+  font-family: "Open Sans";
+  src: url("resources/Proxima_Nova_Thin.otf") format("opentype");
+}
+
+html, body {
+  height: 100%;
+  background-color: rgb(255, 255 , 255);
+  /*background-size: cover;*/
+
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+.centered_main_wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  height: 100%;
+}
+
+
+.title {
+  text-align: center;
+  font-size: 5vw;
+  margin-bottom: 5%;
+  width: 90%
+}
+
+.app_wrapper{
+  width: 100%;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.app{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: 3vw;
+  margin-right: 3vw;
+
+  position: relative;
+}
+
+.app > .icon{
+  border-radius: 50%;
+
+  width: 15vw;
+}
+
+.app > .name{
+  padding: 2vw;
+  font-size: 2vw;
+  width: 100%;
+  text-align: center;
+}
+
+#circle{
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}

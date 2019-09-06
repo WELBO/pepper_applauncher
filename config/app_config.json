@@ -1,0 +1,21 @@
+{
+  "title": "Select an App",
+  "apps":[
+    {
+      "title": "WELBO App",
+      "app_id": "welbo_cloud/behavior_1",
+      "app_logo": "cloud.png",
+      "default": false
+    },
+    {
+      "title": "Dance",
+      "app_id": "arcadia/full_launcher",
+      "app_logo": "ballet.png"
+    },
+    {
+      "title": "Settings",
+      "app_id": "boot-config/.",
+      "app_logo": "settings.png"
+    }
+  ]
+}

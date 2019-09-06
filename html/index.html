@@ -1,0 +1,148 @@
+<html>
+  <script src="scripts/qimessaging.js"></script>
+  <script src="scripts/naoqi.js"></script>
+  <script src="includes/jquery.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="includes/materialize/css/materialize.min.css"  media="screen,projection"/>
+  <script type="text/javascript" src="includes/materialize/js/materialize.min.js"></script>
+  <script src="includes/jquery-circle-progress/dist/circle-progress.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+
+  <body>
+    <div class="centered_main_wrapper">
+      <div id="title" class="title"> </div>
+      <div class="app_wrapper" id="apps">
+
+        <!--div class="app">
+          <img class="icon z-depth-2" src="resources/favorite.png" />
+          <div class="name">Welcome App</div>
+        </div>
+
+        <div class="app">
+          <img class="icon z-depth-2" src="resources/foyer.png" />
+          <div class="name">Foyer</div>
+        </div>
+
+        <div class="app">
+          <img class="icon z-depth-2" src="resources/question.png" />
+          <div id="circle"></div>
+          <div class="name">Quizz</div>
+        </div-->
+      </div>
+      <div id="updateTag" class="chip" style="zoom:1.5;display:none">
+        <img src="resources/HourGlass.gif">
+        Downloading updates in the background. App will restart when done.
+      </div>
+     </div>
+  </body>
+
+  <script>
+    var naoqi = NaoQiSession('198.18.0.1');
+
+    var session= naoqi.session;
+    var trigger_autostart = false;
+    var default_app = "";
+
+    $.when( session.service("ALMemory"), session.service("ALAutonomousLife") ).then(function(mem, autonomouslife){
+      console.log("ALMemory!")
+
+      $.when(mem.getData("WelboAPPL/app_data")).then(function(data){
+        data = JSON.parse(data)
+
+        $('#title').html(data.title);
+
+
+        for(var app in data.apps){
+
+          var app_id= "app"+app;
+          $('#apps').append( stringToHTMLApp(app_id,data.apps[app]) )
+          console.log("loading "+data.apps[app].app_id)
+
+
+          $('#'+app_id).bind('touchstart', {app_id: data.apps[app].app_id, app_type:data.apps[app].app_type} ,function(event){
+            console.log('touched ',event.data.app_id)
+            console.log("opening "+event.data.app_id)
+            if(event.data.app_type){
+              console.log("app type found: "+event.data.app_type)
+              mem.insertData("WelboAPPL/StartedApp/type", event.data.app_type)
+            } else {
+              console.log("app type not found")
+              mem.insertData("WelboAPPL/StartedApp/type", "")
+            }
+
+            autonomouslife.switchFocus(event.data.app_id)
+          });
+
+          //autostart
+          if(data.apps[app].default){
+            default_app= data.apps[app];
+            trigger_autostart = true;
+          }
+        }
+
+        window.setInterval(function(){
+          $.when(mem.getData("WelboAPPL/checked_store"),mem.getData("WelboAPPL/apps_updated"),mem.getData("WelboAPPL/auto_update")  ).then(function(store,updated,auto_update){
+
+            //auto_update='True',updated=0
+            console.log(store,updated,auto_update)
+
+            if (auto_update == "False" || !(store && !updated)){
+              document.getElementById('updateTag').style.display = 'none';
+              if (trigger_autostart){
+                enableAutostart(default_app, mem, autonomouslife)
+                trigger_autostart = false; //Disable it again, otherwise it will be triggered multiple times
+              }
+            }
+            else{
+              document.getElementById('updateTag').style.display = 'block';
+            }
+          });
+        }, 500);
+      });
+
+
+
+
+    });
+
+    function stringToHTMLApp(id,data){
+      var res = '<div id="'+id+'" class="app">' +
+        '<img class="icon z-depth-2" src="resources/'+data.app_logo+'" />'
+
+        if(data.default)
+          res+= '<div id="circle"></div>'
+
+        res += '<div class="name">'+data.title+'</div>' +
+      '</div>';
+      return res;
+    }
+
+    function enableAutostart(default_app, mem, autonomouslife){
+      console.log("registering "+default_app.title+" as a default startup app. starting in 10s.")
+      setTimeout(function(){
+        //When you have time merge this with the code above
+
+        console.log("opening "+default_app.app_id)
+        if(default_app.app_type){
+          console.log("app type found: "+default_app.app_type)
+          mem.insertData("WelboAPPL/StartedApp/type",default_app.app_type)
+        } else {
+          console.log("app type not found")
+          mem.insertData("WelboAPPL/StartedApp/type", "")
+        }
+        autonomouslife.switchFocus(default_app.app_id)
+      }.bind(this), 10000);
+
+      $('#circle').circleProgress({
+        value: 1,
+        size: 150,
+        fill: {
+          gradient: ["red", "red"]
+        },
+        animation: { duration: 10000 }
+      });
+    }
+
+  </script>
+</html>

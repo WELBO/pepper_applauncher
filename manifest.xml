@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<package version="0.0.101" uuid="pepper-app-launcher-service">
+ <names>
+  <name lang="en_US">pepper-app-launcher-service</name>
+  <name lang="nl_NL">pepper-app-launcher-service</name>
+ </names>
+ <descriptionLanguages>
+  <language>en_US</language>
+  <language>nl_NL</language>
+ </descriptionLanguages>
+ <contents>
+  <behaviorContent path=".">
+   <userRequestable/>
+   <nature>solitary</nature>
+   <permissions/>
+  </behaviorContent>
+  <behaviorContent path="behavior_1">
+   <nature>solitary</nature>
+   <autonomous>
+    <condition purpose="launchTrigger"><![CDATA[('Launchpad/BatteryLevel' > 0)]]></condition>
+   </autonomous>
+   <permissions/>
+  </behaviorContent>
+ </contents>
+ <requirements>
+  <naoqiRequirement maxVersion="2.5" minVersion="2.5"/>
+  <robotRequirement model="JULIETTE"/>
+ </requirements>
+ <services>
+  <service autorun="false" name="PepperAppLauncher" execStart="pepper_applauncher.py"/>
+ </services>
+ <executableFiles>
+  <file path="pepper_applauncher.py"/>
+ </executableFiles>
+</package>

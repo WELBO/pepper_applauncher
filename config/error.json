@@ -1,0 +1,10 @@
+{
+  "title": "There was an error loading your app:</br>",
+  "apps":[
+    {
+      "title": "Settings",
+      "app_id": "boot-config/.",
+      "app_logo": "settings.png"
+    }
+  ]
+}
